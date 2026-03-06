@@ -4,50 +4,22 @@ import java.util.ArrayDeque;
 
 public class PalindromeChecker {
 
-    private static final String APP_NAME = "Palindrome Checker App";
-    private static final String VERSION = "2.1";
-
     public static void main(String[] args) {
-
-        showWelcomeMessage();
 
         String word = "madam";
 
-        // Choose algorithm dynamically
-        PalindromeStrategy strategy = new DequeStrategy();
-        // PalindromeStrategy strategy = new StackStrategy();
+        System.out.println("Palindrome Performance Comparison");
+        System.out.println("----------------------------------");
 
-        PalindromeContext context = new PalindromeContext(strategy);
-
-        boolean result = context.execute(word);
-
-        if (result) {
-            System.out.println("The string \"" + word + "\" is a Palindrome.");
-        } else {
-            System.out.println("The string \"" + word + "\" is NOT a Palindrome.");
-        }
-
-        System.out.println("Application execution completed.");
+        runStackAlgorithm(word);
+        runDequeAlgorithm(word);
+        runRecursiveAlgorithm(word);
     }
 
-    private static void showWelcomeMessage() {
-        System.out.println("======================================");
-        System.out.println("        " + APP_NAME);
-        System.out.println("        Version: " + VERSION);
-        System.out.println("======================================");
-        System.out.println();
-    }
-}
+    // Stack Approach
+    private static void runStackAlgorithm(String word) {
 
-/* Strategy Interface */
-interface PalindromeStrategy {
-    boolean checkPalindrome(String word);
-}
-
-/* Stack Strategy */
-class StackStrategy implements PalindromeStrategy {
-
-    public boolean checkPalindrome(String word) {
+        long startTime = System.nanoTime();
 
         Stack<Character> stack = new Stack<>();
 
@@ -55,20 +27,26 @@ class StackStrategy implements PalindromeStrategy {
             stack.push(c);
         }
 
+        boolean isPalindrome = true;
+
         for (char c : word.toCharArray()) {
             if (c != stack.pop()) {
-                return false;
+                isPalindrome = false;
+                break;
             }
         }
 
-        return true;
+        long endTime = System.nanoTime();
+
+        System.out.println("Stack Algorithm Result: " + isPalindrome);
+        System.out.println("Execution Time: " + (endTime - startTime) + " ns");
+        System.out.println();
     }
-}
 
-/* Deque Strategy */
-class DequeStrategy implements PalindromeStrategy {
+    // Deque Approach
+    private static void runDequeAlgorithm(String word) {
 
-    public boolean checkPalindrome(String word) {
+        long startTime = System.nanoTime();
 
         Deque<Character> deque = new ArrayDeque<>();
 
@@ -76,26 +54,44 @@ class DequeStrategy implements PalindromeStrategy {
             deque.addLast(c);
         }
 
+        boolean isPalindrome = true;
+
         while (deque.size() > 1) {
             if (deque.removeFirst() != deque.removeLast()) {
-                return false;
+                isPalindrome = false;
+                break;
             }
         }
 
-        return true;
-    }
-}
+        long endTime = System.nanoTime();
 
-/* Context Class */
-class PalindromeContext {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeContext(PalindromeStrategy strategy) {
-        this.strategy = strategy;
+        System.out.println("Deque Algorithm Result: " + isPalindrome);
+        System.out.println("Execution Time: " + (endTime - startTime) + " ns");
+        System.out.println();
     }
 
-    public boolean execute(String word) {
-        return strategy.checkPalindrome(word);
+    // Recursive Approach
+    private static void runRecursiveAlgorithm(String word) {
+
+        long startTime = System.nanoTime();
+
+        boolean result = isPalindromeRecursive(word, 0, word.length() - 1);
+
+        long endTime = System.nanoTime();
+
+        System.out.println("Recursive Algorithm Result: " + result);
+        System.out.println("Execution Time: " + (endTime - startTime) + " ns");
+        System.out.println();
+    }
+
+    private static boolean isPalindromeRecursive(String word, int start, int end) {
+
+        if (start >= end)
+            return true;
+
+        if (word.charAt(start) != word.charAt(end))
+            return false;
+
+        return isPalindromeRecursive(word, start + 1, end - 1);
     }
 }
