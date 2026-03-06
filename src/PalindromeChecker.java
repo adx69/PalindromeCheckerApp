@@ -1,14 +1,24 @@
 public class PalindromeChecker {
 
     private static final String APP_NAME = "Palindrome Checker App";
-    private static final String VERSION = "1.9";
+    private static final String VERSION = "2.0";
 
     public static void main(String[] args) {
 
         showWelcomeMessage();
 
-        // UC10 Feature
-        checkIgnoringCaseAndSpaces();
+        String word = "madam";
+
+        // Create object of service class
+        PalindromeService service = new PalindromeService();
+
+        boolean result = service.checkPalindrome(word);
+
+        if (result) {
+            System.out.println("The string \"" + word + "\" is a Palindrome.");
+        } else {
+            System.out.println("The string \"" + word + "\" is NOT a Palindrome.");
+        }
 
         System.out.println("Application execution completed.");
     }
@@ -20,37 +30,29 @@ public class PalindromeChecker {
         System.out.println("======================================");
         System.out.println();
     }
+}
 
-    // 🔥 UC10 - Ignore Case and Spaces
-    private static void checkIgnoringCaseAndSpaces() {
+// 🔥 Service class that handles palindrome logic
+class PalindromeService {
 
-        String sentence = "Never Odd Or Even";
+    // Public method exposed to the application
+    public boolean checkPalindrome(String word) {
 
-        // Normalize string
-        String normalized = sentence
-                .toLowerCase()
-                .replaceAll("\\s+", "");   // remove spaces
-
-        boolean isPalindrome = true;
+        char[] chars = word.toCharArray();
 
         int start = 0;
-        int end = normalized.length() - 1;
+        int end = chars.length - 1;
 
         while (start < end) {
 
-            if (normalized.charAt(start) != normalized.charAt(end)) {
-                isPalindrome = false;
-                break;
+            if (chars[start] != chars[end]) {
+                return false;
             }
 
             start++;
             end--;
         }
 
-        if (isPalindrome) {
-            System.out.println("\"" + sentence + "\" is a Palindrome (ignoring spaces & case).");
-        } else {
-            System.out.println("\"" + sentence + "\" is NOT a Palindrome.");
-        }
+        return true;
     }
 }
