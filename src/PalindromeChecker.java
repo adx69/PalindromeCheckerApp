@@ -1,14 +1,14 @@
 public class PalindromeChecker {
 
     private static final String APP_NAME = "Palindrome Checker App";
-    private static final String VERSION = "1.8";
+    private static final String VERSION = "1.9";
 
     public static void main(String[] args) {
 
         showWelcomeMessage();
 
-        // UC9 Feature
-        checkUsingRecursion();
+        // UC10 Feature
+        checkIgnoringCaseAndSpaces();
 
         System.out.println("Application execution completed.");
     }
@@ -21,32 +21,36 @@ public class PalindromeChecker {
         System.out.println();
     }
 
-    // 🔥 UC9 - Recursive Palindrome Check
-    private static void checkUsingRecursion() {
+    // 🔥 UC10 - Ignore Case and Spaces
+    private static void checkIgnoringCaseAndSpaces() {
 
-        String word = "madam";   // Hardcoded string
+        String sentence = "Never Odd Or Even";
 
-        boolean isPalindrome = isPalindromeRecursive(word, 0, word.length() - 1);
+        // Normalize string
+        String normalized = sentence
+                .toLowerCase()
+                .replaceAll("\\s+", "");   // remove spaces
+
+        boolean isPalindrome = true;
+
+        int start = 0;
+        int end = normalized.length() - 1;
+
+        while (start < end) {
+
+            if (normalized.charAt(start) != normalized.charAt(end)) {
+                isPalindrome = false;
+                break;
+            }
+
+            start++;
+            end--;
+        }
 
         if (isPalindrome) {
-            System.out.println("The string \"" + word + "\" is a Palindrome.");
+            System.out.println("\"" + sentence + "\" is a Palindrome (ignoring spaces & case).");
         } else {
-            System.out.println("The string \"" + word + "\" is NOT a Palindrome.");
+            System.out.println("\"" + sentence + "\" is NOT a Palindrome.");
         }
-    }
-
-    // Recursive function
-    private static boolean isPalindromeRecursive(String word, int start, int end) {
-
-        // Base condition
-        if (start >= end)
-            return true;
-
-        // Compare characters
-        if (word.charAt(start) != word.charAt(end))
-            return false;
-
-        // Recursive call
-        return isPalindromeRecursive(word, start + 1, end - 1);
     }
 }
