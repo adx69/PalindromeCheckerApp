@@ -1,25 +1,14 @@
 public class PalindromeChecker {
 
     private static final String APP_NAME = "Palindrome Checker App";
-    private static final String VERSION = "1.7";
-
-    // Node class for Linked List
-    static class Node {
-        char data;
-        Node next;
-
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
+    private static final String VERSION = "1.8";
 
     public static void main(String[] args) {
 
         showWelcomeMessage();
 
-        // UC8 Feature
-        checkUsingLinkedList();
+        // UC9 Feature
+        checkUsingRecursion();
 
         System.out.println("Application execution completed.");
     }
@@ -32,28 +21,12 @@ public class PalindromeChecker {
         System.out.println();
     }
 
-    // 🔥 UC8 - Linked List Based Palindrome Check
-    private static void checkUsingLinkedList() {
+    // 🔥 UC9 - Recursive Palindrome Check
+    private static void checkUsingRecursion() {
 
         String word = "madam";   // Hardcoded string
 
-        // Convert string to linked list
-        Node head = null;
-        Node tail = null;
-
-        for (char c : word.toCharArray()) {
-            Node newNode = new Node(c);
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        boolean isPalindrome = isPalindrome(head);
+        boolean isPalindrome = isPalindromeRecursive(word, 0, word.length() - 1);
 
         if (isPalindrome) {
             System.out.println("The string \"" + word + "\" is a Palindrome.");
@@ -62,49 +35,18 @@ public class PalindromeChecker {
         }
     }
 
-    // Function to check palindrome using linked list
-    private static boolean isPalindrome(Node head) {
+    // Recursive function
+    private static boolean isPalindromeRecursive(String word, int start, int end) {
 
-        if (head == null || head.next == null)
+        // Base condition
+        if (start >= end)
             return true;
 
-        Node slow = head;
-        Node fast = head;
+        // Compare characters
+        if (word.charAt(start) != word.charAt(end))
+            return false;
 
-        // Find middle using fast & slow pointer
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // Reverse second half
-        Node secondHalf = reverseList(slow);
-        Node firstHalf = head;
-
-        // Compare both halves
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data)
-                return false;
-
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-
-        return true;
-    }
-
-    // Reverse Linked List
-    private static Node reverseList(Node head) {
-        Node prev = null;
-        Node current = head;
-
-        while (current != null) {
-            Node next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-        }
-
-        return prev;
+        // Recursive call
+        return isPalindromeRecursive(word, start + 1, end - 1);
     }
 }
